@@ -9,7 +9,8 @@ const AddManager = (props) => {
     const [salary, setSalary] = useState('')
     const [cname, setCname] = useState('')
     const [errors, setErrors] = useState({});
-    const [error, setError] = useState()
+    const [error, setError] = useState();
+
 
     const Categoryoptions = [
         "Sales",
@@ -22,7 +23,7 @@ const AddManager = (props) => {
 
     const DepartmentOptions = [
         "Google",
-        "ipangram",
+        "I-Pengram",
         "Facebook",
         "wipro",
         "wallmart",
@@ -99,7 +100,9 @@ const AddManager = (props) => {
                                 getdata(currentPage)
                             }
                         }
-                    )
+                    ).catch((error) => {
+                        setError(error?.response?.data?.message)
+                    });
                 } else {
                     axios.post('http://localhost:4000/manager/create', data, config).then(
                         (resp) => {
@@ -108,12 +111,15 @@ const AddManager = (props) => {
                                 getdata(currentPage)
                             }
                         }
-                    )
+                    ).catch((error) => {
+                        setError(error?.response?.data?.message)
+                    });
                 }
             }
         }
         catch (error) {
             setError(error?.response?.data?.message)
+            console.log(error)
         }
     }
 
@@ -150,8 +156,9 @@ const AddManager = (props) => {
             backdrop="static"
             keyboard={false}
         >
+            <Modal.Title>{error && <Alert variant="danger">{error}</Alert>} </Modal.Title>
             <Modal.Header closeButton>
-                <Modal.Title>{error && <Alert variant="danger">{error}</Alert>} </Modal.Title>
+
                 <Modal.Title>{editingData ? "Edit Department" : "Add Department"}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
